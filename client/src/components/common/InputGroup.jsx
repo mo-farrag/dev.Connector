@@ -23,6 +23,7 @@ const InputGroup = ({
           "is-invalid": error,
         })}
         placeholder={placeholder}
+        name={name}
         type={type}
         value={value}
         onChange={onChange}
