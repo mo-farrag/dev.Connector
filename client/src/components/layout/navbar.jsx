@@ -6,7 +6,7 @@ import { logoutUser } from "../../actions/authActions";
 import { clearCurrentProfile } from "../../actions/profileActions";
 
 class Navbar extends Component {
-  onLogoutClick = e => {
+  onLogoutClick = (e) => {
     e.preventDefault();
     this.props.clearCurrentProfile();
     this.props.logoutUser();
@@ -15,6 +15,11 @@ class Navbar extends Component {
     const { isAuthenticated, user } = this.props.auth;
     const authLinks = (
       <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link className="nav-link" to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
         <li className="nav-item">
           <a href="" onClick={this.onLogoutClick} className="nav-link">
             <img
@@ -81,12 +86,12 @@ class Navbar extends Component {
 Navbar.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth, // based on names in authReducer, but key can be anything,
-  errors: state.errors // get errors object from errorsReducer
+  errors: state.errors, // get errors object from errorsReducer
 });
 
 export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(
