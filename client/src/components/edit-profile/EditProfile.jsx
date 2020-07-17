@@ -6,9 +6,10 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
-import { createProfile } from "../../actions/profileActions";
+import { createProfile, getCurrentProfile } from "../../actions/profileActions";
+import isEmpty from "../../validation/is-empty";
 
-class CreateProfile extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +34,61 @@ class CreateProfile extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.props.getCurrentProfile();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) this.setState({ errors: nextProps.errors });
+
+    if (nextProps.profile.profile) {
+      const profile = nextProps.profile.profile;
+
+      //convert skills to comma separated..
+      const skills = profile.skills.join(",");
+
+      //if profile field not exists, make it empy string..
+      profile.company = isEmpty(profile.company) ? "" : profile.company;
+      profile.website = isEmpty(profile.website) ? "" : profile.website;
+      profile.location = isEmpty(profile.location) ? "" : profile.location;
+      profile.githubUsername = isEmpty(profile.githubUsername)
+        ? ""
+        : profile.githubUsername;
+      profile.bio = isEmpty(profile.bio) ? "" : profile.bio;
+      profile.social = isEmpty(profile.social) ? {} : profile.social; // make it empty object not string
+      profile.twitter = isEmpty(profile.social.twitter)
+        ? ""
+        : profile.social.twitter;
+      profile.facebook = isEmpty(profile.social.facebook)
+        ? ""
+        : profile.social.facebook;
+      profile.linkedin = isEmpty(profile.social.linkedin)
+        ? ""
+        : profile.social.linkedin;
+      profile.youtube = isEmpty(profile.social.youtube)
+        ? ""
+        : profile.social.youtube;
+      profile.instagram = isEmpty(profile.social.instagram)
+        ? ""
+        : profile.social.instagram;
+
+      //set component field state..
+      this.setState({
+        handle: profile.handle,
+        company: profile.company,
+        website: profile.website,
+        location: profile.location,
+        status: profile.status,
+        skills: skills,
+        githubUsername: profile.githubUsername,
+        bio: profile.bio,
+        twitter: profile.twitter,
+        facebook: profile.facebook,
+        linkedin: profile.linkedin,
+        youtube: profile.youtube,
+        instagram: profile.instagram,
+      });
+    }
   }
 
   onChange(e) {
@@ -126,14 +180,12 @@ class CreateProfile extends Component {
       { label: "Other", value: "Other" },
     ];
     return (
-      <div className="create-profile">
+      <div className="edit-profile">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Create your Profile</h1>
-              <p className="lead text-center">
-                Let's get some information to make your profile stand out
-              </p>
+              <h1 className="display-4 text-center">Edit Profile</h1>
+
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -234,9 +286,11 @@ class CreateProfile extends Component {
   }
 }
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  createProfile: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -244,6 +298,6 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps, { createProfile })(
-  withRouter(CreateProfile)
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  withRouter(EditProfile)
 );
