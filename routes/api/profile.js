@@ -66,6 +66,7 @@ router.get("/all", (req, res) => {
 //@access   public
 router.get("/handle/:handle", (req, res) => {
   const errors = {};
+  console.log("/handle");
 
   Profile.findOne({ handle: req.params.handle })
     .populate("user", ["name", "avatar"]) // include name and avatar from user's object
@@ -160,8 +161,6 @@ router.post(
         });
       }
     });
-    console.log("pp");
-    console.log(req.body);
   }
 );
 
