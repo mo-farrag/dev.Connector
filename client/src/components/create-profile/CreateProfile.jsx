@@ -150,7 +150,7 @@ class CreateProfile extends Component {
                   value={this.state.status}
                   options={options}
                   onChange={this.onChange}
-                  error={errors.handle}
+                  error={errors.status}
                   info="Give us an idea of where you are at in your career"
                 />
 

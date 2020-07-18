@@ -54,6 +54,7 @@ class AddExperience extends Component {
     this.setState({
       disabled: !this.state.disabled,
       current: !this.state.current,
+      to: "",
     });
   }
 

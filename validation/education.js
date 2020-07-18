@@ -25,9 +25,13 @@ module.exports = function validateEducationInput(data) {
   if (Validator.isEmpty(data.from)) {
     errors.from = "from date is required";
   }
+  if (!Validator.isEmpty(data.to)) {
+    if (data.from > data.to)
+      errors.to = "to date should be greater than from date";
+  }
 
   return {
     errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };

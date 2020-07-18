@@ -1,5 +1,6 @@
 const Validator = require("validator");
 const isEmpty = require("../validation/is-empty");
+const { default: validator } = require("validator");
 
 module.exports = function validateExperienceInput(data) {
   let errors = {};
@@ -19,9 +20,13 @@ module.exports = function validateExperienceInput(data) {
   if (Validator.isEmpty(data.from)) {
     errors.from = "from date is required";
   }
+  if (!validator.isEmpty(data.to)) {
+    if (data.from > data.to)
+      errors.to = "to date should be greater than from date";
+  }
 
   return {
     errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };
